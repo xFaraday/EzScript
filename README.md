@@ -1,8 +1,6 @@
 # EZSCRIPT
 > Windows Hardening made EZ | Ethan Michalak
 
-One to two paragraph statement about your product and what it does.
-
 ## Set up
 _Open powershell with administrative privileges
 
