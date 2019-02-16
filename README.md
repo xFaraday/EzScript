@@ -2,7 +2,7 @@
 > Windows Hardening made EZ | Ethan Michalak
 
 ## Set up
-_Open powershell with administrative privileges
+*Open powershell with administrative privileges*
 
 Type:
 ```sh
@@ -21,7 +21,7 @@ Add the Win10Firewall.wfw file to the Desktop of the user running the script
 
 
 ## Running it
-_Open powershell with administrative privileges
+*Open powershell with administrative privileges*
 
 Once inside the directory that houses the script type:
 ```sh
@@ -29,7 +29,7 @@ Once inside the directory that houses the script type:
 ```
 Select the first option and then the second
 
-_Running the second option before the first will brake the script!
+*Running the second option before the first will brake the script!*
 
 ## Usage
 This is a very useful script for sysadmins or IT professionals looking to secure a windows machine in a very easy fashion.  This Script will create a directory on the desktop called scripterino which houses all the files created.
