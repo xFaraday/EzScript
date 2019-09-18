@@ -14,7 +14,8 @@ $user = 'ADJUSTMEBEFORERUNNING'
 
 $option = Read-Host '
 1. File Dump Searcher(remember to adjust filepath to users desktop)
-2. LAUNCH CYBER NUKE?(recommended but take out special needs)
+2. OS Search Engine
+3. LAUNCH CYBER NUKE?(recommended but take out special needs)
  '
  if ($option -eq 1) {
 
@@ -26,6 +27,7 @@ $option = Read-Host '
     New-Item -Path C:\Users\$user\Desktop\scripterino\programfiles -ItemType directory
     New-Item -Path C:\Users\$user\Desktop\scripterino\programfilesx86 -ItemType directory
     New-Item -Path C:\Users\$user\Desktop\scripterino\documents -ItemType directory
+	New-Item -Path C:\Users\$user\Desktop\scripterino\OS_search_engine -ItemType directory
     'grabbing user files'
     Get-ChildItem -Path "C:\Users\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\userfiles
     'grabbing program files'
@@ -35,12 +37,23 @@ $option = Read-Host '
     Get-ChildItem -Path "C:\Users\$user\Documents\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\documentsandsettings
     'catching them special media files'
     Get-ChildItem -Path C:\Users -Include .jpg,.png,.jpeg,.avi,.mp4,.mp3,*.wav -Exclude .dll,.doc,*.docx,  -File -Recurse -ErrorAction SilentlyContinue | Out-File -filepath C:\Users\$user\Desktop\scripterino\Mediafiles.txt
-    'Proceed to search baby ;) keep in mind these are only copies of the originals'
+	'Proceed to search baby ;) keep in mind these are only copies of the originals'
+	
+	 
  }
 
+if ($option -eq 2) {
+	'Please enter the absolute path of the directory you wish to search(start with drive of choice ex: C:\)'
+		$absolutepath = Read-Host
+	'Now enter the string you wish to search for'
+		$string = Read-Host 
+	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} > C:\Users\$user\Desktop\scripterino\OS_search_engine\$absolutepath
+	} 
 
 
- if ($option -eq 2) {
+
+
+ if ($option -eq 3) {
     #setup
 
     'You chose the option NUKE THIS SHIT.....commencing...'    
