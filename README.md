@@ -27,9 +27,9 @@ Once inside the directory that houses the script type:
 ```sh
 ./ezscript.ps1
 ```
-Select the first option and then the second
+Select the first option and then the second or third 
 
-*Running the second option before the first will brake the script!*
+*Running the second or third option before the first will brake the script!*
 
 ## Usage
 This is a very useful script for sysadmins or IT professionals looking to secure a windows machine in a very easy fashion.  This Script will create a directory on the desktop called scripterino which houses all the files created.
