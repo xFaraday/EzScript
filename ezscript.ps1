@@ -13,9 +13,9 @@ $user = 'ADJUSTMEBEFORERUNNING'
 
 
 $option = Read-Host '
-1. File Dump Searcher(remember to adjust filepath to users desktop)
+1. File Dump Searcher(RUN ME FIRST)
 2. OS Search Engine
-3. LAUNCH CYBER NUKE?(recommended but take out special needs)
+3. LAUNCH CYBER NUKE?(take out required services or processes)
  '
  if ($option -eq 1) {
 
