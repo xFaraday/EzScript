@@ -1,22 +1,22 @@
-﻿
 "
 #################################################
 ###               EZSCRIPT SON                ###
 #################################################
 "
-"created by xfaraday :))) "
 "What do you want to do today?"
-""
 $ConfirmPreference = 'None'
-#adjust this variable below before running, leave the quotes
-$user = 'ADJUSTMEBEFORERUNNING'
+$user = $env:username
 
+#adjust this variable in case line 8 doesnt work"env:username"
+#$user = 'ADJUSTMEBEFORERUNNING'
 
+function get-option {
 $option = Read-Host '
 1. File Dump Searcher(RUN ME FIRST)
 2. OS Search Engine
 3. LAUNCH CYBER NUKE?(take out required services or processes)
  '
+ }
  if ($option -eq 1) {
 
     New-Item -Path C:\Users\$user\Desktop\scripterino -ItemType directory
@@ -631,7 +631,5 @@ if ($option -eq 2) {
     cmd.exe /c 'sc config SCPolicySvc start= auto'
     cmd.exe /c 'sc start wscsvc'
     cmd.exe /c 'sc config wscsvc start= auto'
-
-    
-
  }
+ 
