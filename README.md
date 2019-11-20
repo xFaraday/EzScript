@@ -6,13 +6,11 @@
 
 Type:
 ```sh
-set-executionpolicy remote-signed
+set-executionpolicy remote-signed or set-executionpolicy unrestricted
 ```
 Script Changes:
 ```sh
-Adjust $user variable in the script to whatever user you are currently logged into on the machine
-
-Comment out any necessary services or necessary features so they wont be stopped/disabled
+Check the services, features, and firewall section so necessary services wont be stopped/disabled
 ```
 Files:
 ```sh
