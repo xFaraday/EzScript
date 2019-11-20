@@ -28,14 +28,14 @@ $option = Read-Host '
     New-Item -Path C:\Users\$user\Desktop\scripterino\programfilesx86 -ItemType directory
     New-Item -Path C:\Users\$user\Desktop\scripterino\documents -ItemType directory
 	New-Item -Path C:\Users\$user\Desktop\scripterino\OS_search_engine -ItemType directory
-    'grabbing user files'
+    Write-Warning "grabbing user files"
     Get-ChildItem -Path "C:\Users\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\userfiles
-    'grabbing program files'
+    Write-Warning "grabbing program files"
     Get-ChildItem -Path "C:\Program Files\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\programfiles
     Get-ChildItem -Path "C:\Program Files (x86)\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\programfilesx86
-    'grabbing Documents'
+    Write-Warning "grabbing Documents"
     Get-ChildItem -Path "C:\Users\$user\Documents\*" -Include *.jpg,*.png,*.aac,*.ac3,*.avi,*.aiff,*.bat,*.bmp,*.exe,*.flac,*.gif,*.jpeg,*.mov,*.m3u,*.m4p,*.mp2,*.mp3,*.mp4,*.mpeg4,*.midi,*.msi,*.ogg,*.png,*.txt,*.sh,*.wav,*.wma,*.vqf,*.pcap,*.zip,*.pdf,*.json -Recurse | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\documentsandsettings
-    'catching them special media files'
+    Write-Warning "catching them special media files"
     Get-ChildItem -Path C:\Users -Include .jpg,.png,.jpeg,.avi,.mp4,.mp3,*.wav -Exclude .dll,.doc,*.docx,  -File -Recurse -ErrorAction SilentlyContinue | Out-File -filepath C:\Users\$user\Desktop\scripterino\Mediafiles.txt
 	'Proceed to search baby ;) keep in mind these are only copies of the originals'
 	
@@ -50,92 +50,82 @@ if ($option -eq 2) {
 	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} > C:\Users\$user\Desktop\scripterino\OS_search_engine\$absolutepath
 	} 
 
-
-
-
  if ($option -eq 3) {
     #setup
-
-    'You chose the option NUKE THIS SHIT.....commencing...'    
-    Start-Sleep -s 5
-    'managing users'
-    'grabbing users and user groups'
+    Write-Warning "You chose the option NUKE THIS SHIT.....commencing..."
+    [console]::Beep(800,500)
+    Start-Sleep -s 1
+    '3'
+    [console]::Beep(800,500)
+    Start-Sleep -s 1
+    '2'
+    [console]::Beep(800,500)
+    '1'
+    Start-Sleep -s 1
+    Write-Warning "managing users"
+    Write-Warning "performing recon"
     net user > scripterino\users.txt
-    
     net localgroup > scripterino\groups.txt
 
     #disabling guest/admin and renaming them
-    'disabling Guest and Admin account'
+    Write-Warning "disabling Guest and Admin account"
     Get-LocalUser Guest | Disable-LocalUser
     Get-LocalUser Administrator | Disable-LocalUser
-    'renaming guest and admin account'
+    Write-Warning "renaming guest and admin account adminBOI && guestBOI"
     $adminAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Administrator'"
     $result =$adminAccount.Rename("adminBOI")
     $guestAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Guest'"
     $result =$guestAccount.Rename("guestBOI")
 
-
-
     #REKING PLEBS AND THEIR SHIT PASSWORDS
-    'reking plebs and their shit passwords'
+    Write-Warning "reking plebs and their shit passwords, changing to K3wLP@SsW0rd"
     get-wmiobject win32_useraccount | ForEach-Object {
     ([adsi](“WinNT://”+$_.caption).replace(“\”,”/”)).SetPassword(“K3wLP@SsW0rd”)
     }
     
     #AUDIT BABY
-    'STARTING audit m9, this might take a while'
+    Write-Warning "STARTING audit m9, this might take a while"
     #account policies
 
     net accounts /UNIQUEPW:24 /MAXPWAGE:60 /MINPWAGE:1 /MINPWLEN:12 /lockoutthreshold:5
-    
-    
+  
     #localpolicies-audit policies
     auditpol /set /category:"Account Logon" /success:enable #is everything really just success and failure?
     auditpol /set /category:"Account Logon" /failure:enable
-
     auditpol /set /category:"Account Management" /success:enable
     auditpol /set /category:"Account Management" /failure:enable
-
     auditpol /set /category:"DS Access" /success:enable
     auditpol /set /category:"DS Access" /failure:enable
-
     auditpol /set /category:"Logon/Logoff" /success:enable
     auditpol /set /category:"Logon/Logoff" /failure:enable
-    
     auditpol /set /category:"Object Access" /success:enable
     auditpol /set /category:"Object Access" /failure:enable
-
     auditpol /set /category:"Policy Change" /success:enable
     auditpol /set /category:"Policy Change" /failure:enable
-
     auditpol /set /category:"Privilege Use" /success:enable
     auditpol /set /category:"Privilege Use" /failure:enable
-
     auditpol /set /category:"Detailed Tracking" /success:enable
     auditpol /set /category:"Detailed Tracking" /failure:enable
-
     auditpol /set /category:"System" /success:enable 
     auditpol /set /category:"System" /failure:enable
 
     #subcategories of advanced audit polcies
 
-    
-	#grabbing network shares check if irregular
-	'grabbing shares bb'
-	net share > scripterino\shares.txt
+    #grabbing network shares check if irregular
+    Write-Warning "grabbing smb shares bb"
+    net share > scripterino\shares.txt
     	
-
     #flush DNS
-	'flushing dns cache'
-	ipconfig /flushdns
+    Write-Warning "flushing dns cache"
+    ipconfig /flushdns
     
     #Grabbing hosts file
-    'grabbing hosts file'	
+    Write-Warning "grabbing hosts file"	
     New-Item -Path C:\Users\$user\Desktop\scripterino\hosts -ItemType directory
     Get-ChildItem -Path "C:\Windows\System32\drivers\etc\hosts" | Copy-Item -Destination C:\Users\$user\Desktop\scripterino\hosts
 
 
-	'FEATURES BAAAABY'
+	Write-Warning "Features Bbbbb"
 	
 	dism /online /disable-feature /featurename:IIS-WebServerRole
 	dism /online /disable-feature /featurename:IIS-WebServer
@@ -192,11 +182,11 @@ if ($option -eq 2) {
     Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
 
     #processes that have bigger loads
-    'grabbing dem interesting process'
+    Write-Warning "investigating shady processes"
     Get-Process | Where-Object {$_.WorkingSet -gt 20000000} > scripterino\interestingprocess.txt
 
     #firewall settings
-    'Firewall config start'
+    Write-Warning "Hoisting up the firewall"
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
 	Set-NetFirewallProfile -DefaultInboundAction Block -DefaultOutboundAction Allow -NotifyOnListen True -AllowUnicastResponseToMulticast True -LogFileName %SystemRoot%\System32\LogFiles\Firewall\pfirewall.log
     netsh advfirewall import "C:\Users\$user\Desktop\Win10Firewall.wfw"
@@ -230,7 +220,7 @@ if ($option -eq 2) {
 
 
 
-    'starting registry cancer'  
+    Write-Warning "starting registry cancer"  
     Start-Sleep -s 2
 
     #disable remote desktop
@@ -453,7 +443,7 @@ if ($option -eq 2) {
     #Smtpsvc = SMTP service
     #Termservice = remote desktop
 
-    'shrinking attack service *hit the dab*'
+    Write-Warning "shrinking attack service *hit the dab*"
     Start-Sleep -s 2
 
     #badservices
