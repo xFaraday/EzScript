@@ -5,10 +5,10 @@
 "
 "What do you want to do today?"
 $ConfirmPreference = 'None'
-$user = $env:username
+#$user = $env:username
 
 #adjust this variable in case line 8 doesnt work"env:username"
-#$user = 'ADJUSTMEBEFORERUNNING'
+$user = 'ADJUSTMEBEFORERUNNING'
 
 function get-option {
 $option = Read-Host '
