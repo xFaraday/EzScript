@@ -10,6 +10,8 @@ set-executionpolicy remote-signed or set-executionpolicy unrestricted
 ```
 Script Changes:
 ```sh
+Set the user variable at the start of the script to the user you are ex:"jason"
+
 Check the services, features, and firewall section so necessary services wont be stopped/disabled
 ```
 Files:
