@@ -20,8 +20,6 @@ $option = Read-Host '
  if ($option -eq 1) {
 
     New-Item -Path C:\Users\$user\Desktop\scripterino -ItemType directory
-
-    'What is the EXACT name of the user you are currently?'
     'no files are safe [.][.]'
     New-Item -Path C:\Users\$user\Desktop\scripterino\userfiles -ItemType directory
     New-Item -Path C:\Users\$user\Desktop\scripterino\programfiles -ItemType directory
@@ -38,8 +36,6 @@ $option = Read-Host '
     Write-Warning "catching them special media files"
     Get-ChildItem -Path C:\Users -Include .jpg,.png,.jpeg,.avi,.mp4,.mp3,*.wav -Exclude .dll,.doc,*.docx,  -File -Recurse -ErrorAction SilentlyContinue | Out-File -filepath C:\Users\$user\Desktop\scripterino\Mediafiles.txt
 	'Proceed to search baby ;) keep in mind these are only copies of the originals'
-	
-	 
  }
 
 if ($option -eq 2) {
