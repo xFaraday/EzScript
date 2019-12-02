@@ -10,13 +10,12 @@ $ConfirmPreference = 'None'
 #adjust this variable in case line 8 doesnt work"env:username"
 $user = 'ADJUSTMEBEFORERUNNING'
 
-function get-option {
 $option = Read-Host '
 1. File Dump Searcher(RUN ME FIRST)
 2. OS Search Engine
 3. LAUNCH CYBER NUKE?(take out required services or processes)
  '
- }
+
  if ($option -eq 1) {
 
     New-Item -Path C:\Users\$user\Desktop\scripterino -ItemType directory
