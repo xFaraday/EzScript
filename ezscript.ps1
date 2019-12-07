@@ -73,9 +73,9 @@ if ($option -eq 2) {
     $result =$guestAccount.Rename("guestBOI")
 
     #REKING PLEBS AND THEIR SHIT PASSWORDS
-    Write-Warning "reking plebs and their shit passwords, changing to K3wLP@SsW0rd"
-    get-wmiobject win32_useraccount | ForEach-Object {
-    ([adsi](“WinNT://”+$_.caption).replace(“\”,”/”)).SetPassword(“K3wLP@SsW0rd”)
+    Write-Warning "reking plebs and their shit passwords, changing to Asecurepassword123!"
+    Get-WmiObject win32_useraccount | Foreach-Object {
+    ([adsi](“WinNT://”+$_.caption).replace(“\”,”/”)).SetPassword(“Asecurepassword123!”)
     }
     
     #AUDIT BABY
