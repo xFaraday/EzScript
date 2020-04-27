@@ -38,7 +38,7 @@ This script covers all of the following:
 * Users
     * Makes a list of all users and groups on the machine
     * Disables Guest and Admin account and renames them
-    * Sets every users password on the machine to 'K3wLP@SsW0rd'
+    * Sets every users password on the machine to 'Asecurepassword123!'
 * Policies
     * Account policies and Local Policies
 * Makes a file of all shares on the machine
