@@ -19,7 +19,6 @@ Files:
 Add the Win10Firewall.wfw file to the Desktop of the user running the script
 ```
 
-
 ## Running it
 *Open powershell with administrative privileges*
 
@@ -27,14 +26,17 @@ Once inside the directory that houses the script type:
 ```sh
 ./ezscript.ps1
 ```
-Select the first option and then the second or third 
+Select the first option and then the second or third
+
+Comment out any required services
 
 *Running the second or third option before the first will brake the script!*
 
 ## Usage
-This is a very useful script for sysadmins or IT professionals looking to secure a windows machine in a very easy fashion.  This Script will create a directory on the desktop called scripterino which houses all the files created.
+This Script will create a directory on the desktop called scripterino which houses all the files created.
 This script covers all of the following:
-* All types of files and categorizes them
+* copies valuable types of files and categorizes them
+* Provides an easier to read and more useful NETSTAT
 * Users
     * Makes a list of all users and groups on the machine
     * Disables Guest and Admin account and renames them
