@@ -12,7 +12,7 @@ $user = 'ADJUSTMEBEFORERUNNING'
 
 $option = Read-Host '
 1. File Dump Searcher(RUN ME FIRST)
-2. LAUNCH CYBER NUKE?(take out required services or processes)
+2. LAUNCH CYBER NUKE?(comment out required services or processes)
 3. Upgraded NETSTAT
 4. OS file search
  '
