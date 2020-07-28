@@ -12,8 +12,9 @@ $user = 'ADJUSTMEBEFORERUNNING'
 
 $option = Read-Host '
 1. File Dump Searcher(RUN ME FIRST)
-2. OS Search Engine
-3. LAUNCH CYBER NUKE?(take out required services or processes)
+2. LAUNCH CYBER NUKE?(take out required services or processes)
+3. Upgraded NETSTAT
+4. OS file search
  '
 
  if ($option -eq 1) {
@@ -37,15 +38,7 @@ $option = Read-Host '
 	'Proceed to search baby ;) keep in mind these are only copies of the originals'
  }
 
-if ($option -eq 2) {
-	'Please enter the absolute path of the directory you wish to search(start with drive of choice ex: C:\)'
-		$absolutepath = Read-Host
-	'Now enter the string you wish to search for'
-		$string = Read-Host 
-	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} > C:\Users\$user\Desktop\scripterino\OS_search_engine\$absolutepath
-	} 
-
- if ($option -eq 3) {
+ if ($option -eq 2) {
     #setup
     Write-Warning "You chose the option NUKE THIS SHIT.....commencing..."
     [console]::Beep(800,500)
@@ -628,3 +621,39 @@ if ($option -eq 2) {
     cmd.exe /c 'sc config wscsvc start= auto'
  }
  
+ if ($option -eq 3) {
+	#Better netstat mechanism 0.1
+	#
+	#
+	# Name|x| Process|x| Port|x| 
+	#
+	# for each process, find port, for each port make object
+
+	$proclist = (get-nettcpconnection | ? {$_.State -eq 'Listen'}).OwningProcess
+
+	$tcpcon = @()
+	$i = 1
+	foreach ($proc in $proclist) {
+    	Write-Progress -Activity "TcpConnection" -Status "Filling New Object tcpcon" -PercentComplete (($i / $proclist.Count) * 100)
+    	$procname = (Get-Process -PID $proc).ProcessName
+    	$port = (Get-NetTCPConnection | ? {$_.OwningProcess -eq $proc}).LocalPort
+    	$tcpcon += [PSCustomObject]@{
+        	'Name' = $procname
+        	'ProcessId' = $proc
+        	'Port' = $port
+    	}
+    $i++
+}
+
+
+$tcpcon | sort Name | ft -AutoSize
+
+ }
+
+ if ($option -eq 4) {
+	'Please enter the absolute path of the directory you wish to search(start with drive of choice ex: C:\)'
+		$absolutepath = Read-Host
+	'Now enter the string you wish to search for'
+		$string = Read-Host 
+	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} > C:\Users\$user\Desktop\scripterino\OS_search_engine\$absolutepath
+	} 
