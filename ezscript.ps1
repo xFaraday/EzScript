@@ -5,20 +5,17 @@
 "
 "What do you want to do today?"
 $ConfirmPreference = 'None'
-#$user = $env:username
 
-#adjust this variable in case line 8 doesnt work"env:username"
+#adjust this variable to user running this script
 $user = 'ADJUSTMEBEFORERUNNING'
 
 $option = Read-Host '
-1. File Dump Searcher(RUN ME FIRST)
-2. LAUNCH CYBER NUKE?(comment out required services or processes)
-3. Upgraded NETSTAT
-4. OS file search
+1. File Dump & LockDown Nuke
+2. Upgraded NETSTAT
+3. OS file search
  '
 
- if ($option -eq 1) {
-
+if ($option -eq 1) {
     New-Item -Path C:\Users\$user\Desktop\scripterino -ItemType directory
     'no files are safe [.][.]'
     New-Item -Path C:\Users\$user\Desktop\scripterino\userfiles -ItemType directory
@@ -36,9 +33,7 @@ $option = Read-Host '
     Write-Warning "catching them special media files"
     Get-ChildItem -Path C:\Users -Include .jpg,.png,.jpeg,.avi,.mp4,.mp3,*.wav -Exclude .dll,.doc,*.docx,  -File -Recurse -ErrorAction SilentlyContinue | Out-File -filepath C:\Users\$user\Desktop\scripterino\Mediafiles.txt
 	'Proceed to search baby ;) keep in mind these are only copies of the originals'
- }
 
- if ($option -eq 2) {
     #setup
     Write-Warning "You chose the option NUKE THIS SHIT.....commencing..."
     [console]::Beep(800,500)
@@ -67,8 +62,8 @@ $option = Read-Host '
 
     #REKING PLEBS AND THEIR SHIT PASSWORDS
     Write-Warning "reking plebs and their shit passwords, changing to Asecurepassword123!"
-    Get-WmiObject win32_useraccount | Foreach-Object {
-    ([adsi](“WinNT://”+$_.caption).replace(“\”,”/”)).SetPassword(“Asecurepassword123!”)
+    Get-WmiObject win32_useraccount | Foreach-object {
+    ([adsi]("WinNT://"+$_.caption).replace("\","/")).SetPassword("Asecurepassword123!")
     }
     
     #AUDIT BABY
@@ -619,11 +614,10 @@ $option = Read-Host '
     cmd.exe /c 'sc config SCPolicySvc start= auto'
     cmd.exe /c 'sc start wscsvc'
     cmd.exe /c 'sc config wscsvc start= auto'
- }
+}
  
- if ($option -eq 3) {
+if ($option -eq 2) {
 	#Better netstat mechanism 0.1
-	#
 	#
 	# Name|x| Process|x| Port|x| 
 	#
@@ -642,18 +636,15 @@ $option = Read-Host '
         	'ProcessId' = $proc
         	'Port' = $port
     	}
-    $i++
+        $i++
+    }
+    $tcpcon | sort Name | ft -AutoSize
 }
 
-
-$tcpcon | sort Name | ft -AutoSize
-
- }
-
- if ($option -eq 4) {
+if ($option -eq 3) {
 	'Please enter the absolute path of the directory you wish to search(start with drive of choice ex: C:\)'
 		$absolutepath = Read-Host
 	'Now enter the string you wish to search for'
 		$string = Read-Host 
-	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} > C:\Users\$user\Desktop\scripterino\OS_search_engine\$absolutepath
-	} 
+	ls -r $absolutepath -file | % {Select-String -path $_ -pattern $string} 
+} 
