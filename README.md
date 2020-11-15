@@ -26,11 +26,10 @@ Once inside the directory that houses the script type:
 ```sh
 ./ezscript.ps1
 ```
-Select the first option and then the second or third
+
+Then select what you want to do!  Be careful, the changes made by the 1st option might be hard to reverse.
 
 Comment out any required services
-
-*Running the second or third option before the first will brake the script!*
 
 ## Usage
 This Script will create a directory on the desktop called scripterino which houses all the files created.
