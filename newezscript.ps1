@@ -51,8 +51,8 @@ Param(
 
 
 function useraudit() {
-    net user > scripterino\users.txt
-    net localgroup > scripterino\groups.txt
+    net user > 
+    net localgroup > 
 
     Write-Warning "renaming guest and admin account adminBOI && guestBOI"
     $adminAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Administrator'"
@@ -177,7 +177,15 @@ function services($WhiteList) {
         "xbgm"
         "xboxgip"
     )
+    if($Whitelist -ne "safe") {
+       foreach($serv in $WhiteList) {
 
+        }
+    } else {
+        foreach($servdis in $services) {
+
+        }
+    }
 }
 
 function hoistfirewall() {
