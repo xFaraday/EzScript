@@ -617,7 +617,7 @@ if ($option -eq 1) {
 }
  
 if ($option -eq 2) {
-	#Better netstat mechanism 0.1
+	#Better netstat mechanism 0.3
 	#
 	# Name|x| Process|x| Port|x| 
 	#
@@ -630,11 +630,13 @@ if ($option -eq 2) {
 	foreach ($proc in $proclist) {
     	Write-Progress -Activity "TcpConnection" -Status "Filling New Object tcpcon" -PercentComplete (($i / $proclist.Count) * 100)
     	$procname = (Get-Process -PID $proc).ProcessName
+        $procpath = (Get-Process -PID $proc).Path
     	$port = (Get-NetTCPConnection | ? {$_.OwningProcess -eq $proc}).LocalPort
     	$tcpcon += [PSCustomObject]@{
         	'Name' = $procname
         	'ProcessId' = $proc
         	'Port' = $port
+            'Path to bin' = $procpath
     	}
         $i++
     }
