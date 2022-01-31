@@ -54,11 +54,11 @@ if ($option -eq 1) {
     Write-Warning "disabling Guest and Admin account"
     Get-LocalUser Guest | Disable-LocalUser
     Get-LocalUser Administrator | Disable-LocalUser
-    Write-Warning "renaming guest and admin account adminBOI && guestBOI"
+    Write-Warning "renaming guest and admin account LittleABOI && LittleGBOI"
     $adminAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Administrator'"
-    $result =$adminAccount.Rename("adminBOI")
+    $result =$adminAccount.Rename("LittleABOI")
     $guestAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Guest'"
-    $result =$guestAccount.Rename("guestBOI")
+    $result =$guestAccount.Rename("LittleGBOI")
 
     #REKING PLEBS AND THEIR SHIT PASSWORDS
     Write-Warning "reking plebs and their shit passwords, changing to Asecurepassword123!"
