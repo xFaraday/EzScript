@@ -96,7 +96,7 @@ function features() {
 }
 
 function services($WhiteList) {
-    $services = @(
+    $services = [System.Collections.ArrayList]::new(
         "AXInstSV"
         "AdobeARMservice"
         "AxInstSV"
@@ -177,13 +177,96 @@ function services($WhiteList) {
         "xbgm"
         "xboxgip"
     )
+    <#
+    $services = @(
+        "AXInstSV"
+        "AdobeARMservice"
+        "AxInstSV"
+        "CscService"
+        "Dfs"
+        "ERSvc"
+        "EventSystem"
+        "HomeGroupListener"
+        "HomeGroupProvider"
+        "IPBusEnum"
+        "Iisadmin"
+        "IsmServ"
+        "MSDTC"
+        "MSSQLServerADHelper"
+        "Messenger"
+        "Msftpsvc"
+        "NetTcpPortSharing"
+        "Netlogon"
+        "NtFrs"
+        "PolicyAgent"
+        "RDSessMgr"
+        "RSoPProv"
+        "RasAuto"
+        "RasMan"
+        "RemoteAccess"
+        "RpcSs"
+        "SCardSvr"
+        "SENS"
+        "SSDPSRV"
+        "Sacsvr"
+        "Server"
+        "SessionEnv"
+        "SharedAccess"
+        "Smtpsvc"
+        "Spooler"
+        "SysMain"
+        "TabletInputService"
+        "TapiSrv"
+        "TeamViewer"
+        "TeamViewer7"
+        "TermService"
+        "Themes"
+        "TrkWks"
+        "UmRdpService"
+        "VDS"
+        "VSS"
+        "W3svc"
+        "WAS"
+        "WINS"
+        "WmdmPmSN"
+        "XblAuthManager"
+        "XblGameSave"
+        "XboxGipSvc"
+        "fax"
+        "ftpsvc"
+        "helpsvc"
+        "hidserv"
+        "iphlpsvc"
+        "iprip"
+        "lanmanserver"
+        "lltdsvc"
+        "mnmsrvc"
+        "msftpsvc"
+        "nfsclnt"
+        "nfssvc"
+        "p2pimsvc"
+        "remoteregistry"
+        "seclogon"
+        "sessionenv"
+        "simptcp"
+        "snmptrap"
+        "ssdpsrv"
+        "termservice"
+        "tlntsvr"
+        "uploadmgr"
+        "upnphos"
+        "upnphost"
+        "xbgm"
+        "xboxgip"
+    )#>
     if($Whitelist -ne "safe") {
        foreach($serv in $WhiteList) {
-
+        
         }
     } else {
         foreach($servdis in $services) {
-
+            cmd.exe /c sc.exe stop $servdis
+            cmd.exe /c sc.exe config $servdis start= disabled
         }
     }
 }
@@ -243,16 +326,13 @@ function hoistfirewall() {
     netsh advfirewall firewall add rule name="Block wmic.exe netconns" program="%systemroot%\SysWOW64\wbem\wmic.exe" protocol=tcp dir=out enable=yes action=block profile=any
     netsh advfirewall firewall add rule name="Block wscript.exe netconns" program="%systemroot%\system32\wscript.exe" protocol=tcp dir=out enable=yes action=block profile=any
     netsh advfirewall firewall add rule name="Block wscript.exe netconns" program="%systemroot%\SysWOW64\wscript.exe" protocol=tcp dir=out enable=yes action=block profile=any
-
 }
 
 function defenderconfig() {
     #sandbox windows defender
     setx /M MP_FORCE_USE_SANDBOX 1
-
     #update signatures
     cmd.exe /c "%ProgramFiles%"\"Windows Defender"\MpCmdRun.exe -SignatureUpdate
-
     #potentionally unwanted software
     Set-MpPreference -PUAProtection enable
 
@@ -264,8 +344,16 @@ function defenderconfig() {
     Add-MpPreference -AttackSurfaceReductionRules_Ids C1DB55AB-C21A-4637-BB3F-A12568109D35 -AttackSurfaceReductionRules_Actions Enabled
     #prevent stealing from LSASS
     Add-MpPreference -AttackSurfaceReductionRules_Ids 9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2 -AttackSurfaceReductionRules_Actions Enabled
-
-
+    #block office communication
+    Add-MpPreference -AttackSurfaceReductionRules_Ids 26190899-1602-49e8-8b27-eb1d0a1ce869 -AttackSurfaceReductionRules_Actions Enabled
+    #block office executables
+    Add-MpPreference -AttackSurfaceReductionRules_Ids 3b576869-a4ec-4529-8536-b80a7769e899 -AttackSurfaceReductionRules_Actions Enabled
+    #block execution of obfuscated scripts
+    Add-MpPreference -AttackSurfaceReductionRules_Ids 5beb7efe-fd9a-4556-801d-275e5ffc04cc -AttackSurfaceReductionRules_Actions Enabled
+    #block office applications from injecting code into other processes
+    Add-MpPreference -AttackSurfaceReductionRules_Ids 75668c1f-73b5-4cf0-bb93-3ecf5cb7cc84 -AttackSurfaceReductionRules_Actions Enabled
+    #block javascript or VBscript
+    Add-MpPreference -AttackSurfaceReductionRules_Ids d3e037e1-3eb8-44c8-a917-57927947596d -AttackSurfaceReductionRules_Actions Enabled
 }
 
 function registrykeys() {
@@ -288,6 +376,9 @@ function registrykeys() {
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan" /v "CheckForSignaturesBeforeRunningScan" /t REG_DWORD /d 1 /f
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan" /v "DisableHeuristics" /t REG_DWORD /d 0 /f
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v "ScanWithAntiVirus" /t REG_DWORD /d 3 /f
+    
+    #disable auto admin login
+    reg ADD "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_DWORD /d 0 /f
 
     #Clear null session pipes
     reg ADD HKLM\SYSTEM\CurrentControlSet\services\LanmanServer\Parameters /v NullSessionPipes /t REG_MULTI_SZ /d "" /f
@@ -346,6 +437,28 @@ function registrykeys() {
     #Disable dump file creation
     reg ADD HKLM\SYSTEM\CurrentControlSet\Control\CrashControl /v CrashDumpEnabled /t REG_DWORD /d 0 /f
 
+    #disable autoruns
+    reg ADD HKCU\SYSTEM\CurrentControlSet\Services\CDROM /v AutoRun /t REG_DWORD /d 1 /f
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoAutorun" /t REG_DWORD /d 1 /f
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoDriveTypeAutoRun" /t REG_DWORD /d 255 /f
+    
+    #block macros and other content execution
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\access\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\excel\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\excel\security" /v "blockcontentexecutionfrominternet" /t REG_DWORD /d 1 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\excel\security" /v "excelbypassencryptedmacroscan" /t REG_DWORD /d 0 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\ms project\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\ms project\security" /v "level" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\outlook\security" /v "level" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\powerpoint\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\powerpoint\security" /v "blockcontentexecutionfrominternet" /t REG_DWORD /d 1 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\publisher\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\visio\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\visio\security" /v "blockcontentexecutionfrominternet" /t REG_DWORD /d 1 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\word\security" /v "vbawarnings" /t REG_DWORD /d 4 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\word\security" /v "blockcontentexecutionfrominternet" /t REG_DWORD /d 1 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\16.0\word\security" /v "wordbypassencryptedmacroscan" /t REG_DWORD /d 0 /f
+    reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\office\common\security" /v "automationsecurity" /t REG_DWORD /d 3 /f
 
     ### AUDIT POWERSHELL ###
 
@@ -356,6 +469,14 @@ function registrykeys() {
     reg ADD HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging /v EnableScriptBlockLogging /t REG_DWORD /d 1 /f
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging" /v EnableModuleLogging /t REG_DWORD /d 1 /f
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" /v EnableScriptBlockLogging /t REG_DWORD /d 1 /f
+}
+
+function techaccount() {
+    $Username = "techie"
+    $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+    $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+    cmd.exe /c "net user $Username $passwordplaintext /add"
+    cmd.exe /c "net localgroup Administrators $Username /add"
 }
 
 function goodpractice() {
