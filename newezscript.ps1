@@ -48,11 +48,12 @@ Param(
     [Parameter()]
     [switch]$level1
 )
+}
 
 
 function useraudit() {
-    net user > 
-    net localgroup > 
+    #net user > 
+    #net localgroup > 
 
     Write-Warning "renaming guest and admin account adminBOI && guestBOI"
     $adminAccount =Get-WMIObject Win32_UserAccount -Filter "Name='Administrator'"
@@ -97,84 +98,84 @@ function features() {
 
 function services($WhiteList) {
     $services = [System.Collections.ArrayList]::new(
-        "AXInstSV"
-        "AdobeARMservice"
-        "AxInstSV"
-        "CscService"
-        "Dfs"
-        "ERSvc"
-        "EventSystem"
-        "HomeGroupListener"
-        "HomeGroupProvider"
-        "IPBusEnum"
-        "Iisadmin"
-        "IsmServ"
-        "MSDTC"
-        "MSSQLServerADHelper"
-        "Messenger"
-        "Msftpsvc"
-        "NetTcpPortSharing"
-        "Netlogon"
-        "NtFrs"
-        "PolicyAgent"
-        "RDSessMgr"
-        "RSoPProv"
-        "RasAuto"
-        "RasMan"
-        "RemoteAccess"
-        "RpcSs"
-        "SCardSvr"
-        "SENS"
-        "SSDPSRV"
-        "Sacsvr"
-        "Server"
-        "SessionEnv"
-        "SharedAccess"
-        "Smtpsvc"
-        "Spooler"
-        "SysMain"
-        "TabletInputService"
-        "TapiSrv"
-        "TeamViewer"
-        "TeamViewer7"
-        "TermService"
-        "Themes"
-        "TrkWks"
-        "UmRdpService"
-        "VDS"
-        "VSS"
-        "W3svc"
-        "WAS"
-        "WINS"
-        "WmdmPmSN"
-        "XblAuthManager"
-        "XblGameSave"
-        "XboxGipSvc"
-        "fax"
-        "ftpsvc"
-        "helpsvc"
-        "hidserv"
-        "iphlpsvc"
-        "iprip"
-        "lanmanserver"
-        "lltdsvc"
-        "mnmsrvc"
-        "msftpsvc"
-        "nfsclnt"
-        "nfssvc"
-        "p2pimsvc"
-        "remoteregistry"
-        "seclogon"
-        "sessionenv"
-        "simptcp"
-        "snmptrap"
-        "ssdpsrv"
-        "termservice"
-        "tlntsvr"
-        "uploadmgr"
-        "upnphos"
-        "upnphost"
-        "xbgm"
+        "AXInstSV",
+        "AdobeARMservice",
+        "AxInstSV",
+        "CscService",
+        "Dfs",
+        "ERSvc",
+        "EventSystem",
+        "HomeGroupListener",
+        "HomeGroupProvider",
+        "IPBusEnum",
+        "Iisadmin",
+        "IsmServ",
+        "MSDTC",
+        "MSSQLServerADHelper",
+        "Messenger",
+        "Msftpsvc",
+        "NetTcpPortSharing",
+        "Netlogon",
+        "NtFrs",
+        "PolicyAgent",
+        "RDSessMgr",
+        "RSoPProv",
+        "RasAuto",
+        "RasMan",
+        "RemoteAccess",
+        "RpcSs",
+        "SCardSvr",
+        "SENS",
+        "SSDPSRV",
+        "Sacsvr",
+        "Server",
+        "SessionEnv",
+        "SharedAccess",
+        "Smtpsvc",
+        "Spooler",
+        "SysMain",
+        "TabletInputService",
+        "TapiSrv",
+        "TeamViewer",
+        "TeamViewer7",
+        "TermService",
+        "Themes",
+        "TrkWks",
+        "UmRdpService",
+        "VDS",
+        "VSS",
+        "W3svc",
+        "WAS",
+        "WINS",
+        "WmdmPmSN",
+        "XblAuthManager",
+        "XblGameSave",
+        "XboxGipSvc",
+        "fax",
+        "ftpsvc",
+        "helpsvc",
+        "hidserv",
+        "iphlpsvc",
+        "iprip",
+        "lanmanserver",
+        "lltdsvc",
+        "mnmsrvc",
+        "msftpsvc",
+        "nfsclnt",
+        "nfssvc",
+        "p2pimsvc",
+        "remoteregistry",
+        "seclogon",
+        "sessionenv",
+        "simptcp",
+        "snmptrap",
+        "ssdpsrv",
+        "termservice",
+        "tlntsvr",
+        "uploadmgr",
+        "upnphos",
+        "upnphost",
+        "xbgm",
         "xboxgip"
     )
     <#
@@ -477,13 +478,26 @@ function techaccount() {
     $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
     cmd.exe /c "net user $Username $passwordplaintext /add"
     cmd.exe /c "net localgroup Administrators $Username /add"
+    Write-Host "Tech account created!"
+
+    try {
+        Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH*' | Add-WindowsCapability -Online
+        Write-Host "OpenSSH feature added" -BackgroundColor Green
+        Start-Service ssh-agent
+        Write-Host "SSH agent started" -BackgroundColor Green
+        Set-Service -Name ssh-agent -StartupType 'Automatic'
+        Write-Host "SSH Service set to automatic" -BackgroundColor Green
+        New-NetFirewallRule -Name ssh -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+        Write-Host "SSH firewall permission set" -BackgroundColor Green
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name AuthorizedUserKeys -Value (Get-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name AuthorizedUserKeys).AuthorizedUserKeys + ",`"$Username`""
+        Write-Host "Tech account added to SSH accessible key" -BackgroundColor Green
+    } catch {
+        "SSH Setup Failure"
+        Write-Host "Exception info:" + $_
+    }
+
 }
 
 function goodpractice() {
-
-}
-
-
-
 
 }
