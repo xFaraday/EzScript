@@ -476,7 +476,7 @@ function techaccount() {
     $Username = "techie"
     $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
     $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
-    cmd.exe /c "net user $Username $passwordplaintext /add"
+    cmd.exe /c "net user $Username $passwordplaintext /add /y"
     cmd.exe /c "net localgroup Administrators $Username /add"
     Write-Host "Tech account created!"
 
