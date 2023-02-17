@@ -480,24 +480,12 @@ function techaccount() {
     cmd.exe /c "net localgroup Administrators $Username /add"
     Write-Host "Tech account created!"
 
-    try {
-        Get-WindowsCapability -Online | Where-Object Name -Like 'OpenSSH*' | Add-WindowsCapability -Online
-        Write-Host "OpenSSH feature added" -BackgroundColor Green
-        Start-Service ssh-agent
-        Write-Host "SSH agent started" -BackgroundColor Green
-        Set-Service -Name ssh-agent -StartupType 'Automatic'
-        Write-Host "SSH Service set to automatic" -BackgroundColor Green
-        New-NetFirewallRule -Name ssh -DisplayName 'OpenSSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
-        Write-Host "SSH firewall permission set" -BackgroundColor Green
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name AuthorizedUserKeys -Value (Get-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name AuthorizedUserKeys).AuthorizedUserKeys + ",`"$Username`""
-        Write-Host "Tech account added to SSH accessible key" -BackgroundColor Green
-    } catch {
-        "SSH Setup Failure"
-        Write-Host "Exception info:" + $_
-    }
-
 }
 
-function goodpractice() {
 
-}
+useraudit
+techaccount
+registrykeys
+defenderconfig
+hoistfirewall
+features
