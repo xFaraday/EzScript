@@ -90,9 +90,9 @@ function networkshares() {
 
 
 function features() {
-    dism /online /disable-feature /featurename:TelnetClient
-    dism /online /disable-feature /featurename:TelnetServer
-    dism /online /disable-feature /featurename:"SMB1Protocol"
+    dism /online /disable-feature /featurename:TelnetClient /NoRestart
+    dism /online /disable-feature /featurename:TelnetServer /NoRestart
+    dism /online /disable-feature /featurename:"SMB1Protocol" /NoRestart
     Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
 }
 
