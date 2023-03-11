@@ -483,8 +483,18 @@ function techaccount() {
 }
 
 
+function rdpsecure() {
+    # Enable RDP and set the firewall rule to allow RDP traffic
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+
+    # Add "hunter" to the list of allowed remote users
+    Add-LocalGroupMember -Group "Remote Desktop Users" -Member "techie"
+}
+
 useraudit
 techaccount
+rdpsecure
 registrykeys
 defenderconfig
 hoistfirewall
