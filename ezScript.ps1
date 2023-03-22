@@ -353,10 +353,10 @@ function rdpSecure() {
 function homeGroup() {
     Write-Host "Configuring HomeGroup Services..." -ForegroundColor Gray
     try {
-        Start-Service "HomeGroupListener"
-        Set-Service "HomeGroupListener" - StartupType Enabled
-        Start-Service "HomeGroupProvider"
-        Set-Service "HomeGroupProvider" -StartupType Enabled
+        Stop-Service "HomeGroupListener"
+        Set-Service "HomeGroupListener" -StartupType Disabled
+        Stop-Service "HomeGroupProvider"
+        Set-Service "HomeGroupProvider" -StartupType Disabled
 
     }
     catch {
