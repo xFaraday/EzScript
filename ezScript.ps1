@@ -28,7 +28,7 @@ function policyAudit() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\policyAudit.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 
@@ -43,7 +43,7 @@ function globalAudit() {
         }
         catch {
             Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\globalAudit.txt"
-            Write-Host "Writing error to file" -ForegroundColor Green
+            Write-Host "Writing error to file" -ForegroundColor DarkYellow
 
         }
     }
@@ -55,7 +55,7 @@ function globalAudit() {
         }
         catch {
             Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\globalAudit.txt"
-            Write-Host "Writing" -ForegroundColor Green
+            Write-Host "Writing" -ForegroundColor DarkYellow
         }
 
 }
@@ -114,7 +114,7 @@ function smbGood() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\smbGood.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green 
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow 
     }
 
 }
@@ -129,7 +129,7 @@ function groupPolicy() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\groupPolicy.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 
 }
@@ -142,7 +142,7 @@ function telnetEnable() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\telnetEnable.txt"
-        Write-Host "writing error to file" -ForegroundColor Green
+        Write-Host "writing error to file" -ForegroundColor DarkYellow
     }
 }
 function hostFirewall() {
@@ -204,7 +204,7 @@ function hostFirewall() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\hostFirewall.txt"
-        Write-host "Writing error to file" -ForegroundColor Green
+        Write-host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 
@@ -217,7 +217,7 @@ function winRM() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\winRM.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 
@@ -235,7 +235,7 @@ function anonLdap() {
             }
             catch {
                 Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\anonLdap.txt"
-                Write-Host "Writing error to file" -ForegroundColor Green
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
             }
         }
     }
@@ -273,7 +273,7 @@ function defenderConfig() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\defenderConfig.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 
@@ -365,22 +365,100 @@ function registryKeys() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\registryKeys.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 
 function techAccount() {
     Write-Host "configuring techaccount..." -ForegroundColor Gray
-    try {
-        $Username = "techie"
-        $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
-        $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
-        cmd.exe /c "net user $Username $passwordplaintext /add /y"
-        cmd.exe /c "net localgroup Administrators $Username /add"            
-    }
-    catch {
-        Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+    $OS = (Get-WmiObject Win32_OperatingSystem).Caption
+    switch -wildcard($OS){
+        '*Windows 10*'{
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }    
+        }
+        '*Windows 8.1*' {
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }
+        }
+        '*Windows 8*' {
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }
+        }
+        '*Windows 7*' {
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }
+        }
+        '*Windows Vista*'{
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }
+        }
+        '*Windows XP*'{
+            try {
+                $Username = "techie"
+                $Password = "c2VjdXJld2luZG93c3Bhc3N3b3JkMTIz"
+                $passwordplaintext = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Password))
+                cmd.exe /c "net user $Username $passwordplaintext /add /y"
+                cmd.exe /c "net localgroup Administrators $Username /add"            
+
+            }
+            catch {
+                Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\techAccount.txt"
+                Write-Host "Writing error to file" -ForegroundColor DarkYellow
+            }
+        }
+        '*Windows Server*' {
+            Write-Output "This is a server enabled device. Skipping function."
+        }
+        default {
+            Write-Output "Unknown OS: $OS"
+        }
     }
 }
 
@@ -395,7 +473,7 @@ function homeGroup() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\homeGroup.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
 function micellaneousStuff() {
@@ -405,12 +483,52 @@ function micellaneousStuff() {
     }
     catch {
         Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\micellaneousStuff.txt"
-        Write-Host "Writing error to file" -ForegroundColor Green
-
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
     }
 }
-function cisCompliant(){
+function localPass(){
+    Write-Host "Changing local passwords..." -ForegroundColor Gray
+    try {
+        $userList = @()
+        $users = Get-LocalUser
+        foreach ($user in $users) {
+            $newPassword = -join ((33..126) | Get-Random -Count 16 | Foreach-Object {[char]$_})
+            $user | Set-LocalUser -Password (ConvertTo-SecureString -AsPlainText $newPassword -Force)
+        
+    
+        $userFull = [PSCustomObject]@{
+            "AccountName" = $user
+            "Password" = $newPassword
+        }
+        
+        $userList += $userFull
+        $userList | Export-Csv -Path "C:\Program Files\ezScript\localmod.csv" -NoTypeInformation
+        }
+    
+    }
+    catch {
+        Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\localPass"
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
+    }
+}
 
+function adminChange(){
+    Write-Host "Changing Administrators name..." -ForegroundColor Gray
+    try {
+        $adminName = "Administrator"
+        $newAdminname = "Wasabi"
+        $adminAccount = Get-LocalUser -Name $adminName
+    
+        Rename-LocalUser -Name $adminName -NewName $newAdminname
+        $adminGroup = Get-LocalGroup -Name "Administrators"
+        $adminGroup.Members.Remove($adminAccount)
+        $adminGroup.Members.Add($newAdminname)
+    }
+    catch {
+        Write-Output "$Error[0] $_" | Out-File "C:\Program Files\ezScript\adminChange.txt"
+        Write-Host "Writing error to file" -ForegroundColor DarkYellow
+
+    }
 }
 
 function Invoke-ezScript () {
@@ -429,6 +547,7 @@ groupPolicy > $null
 telnetEnable > $null
 homeGroup > $null
 micellaneousStuff > $null
-cisCompliant > $null
+adminChange > $null
+localPass > $null
 }
 Invoke-ezScript
